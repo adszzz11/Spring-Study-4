@@ -2,8 +2,9 @@ package hellojpa;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-@Entity
+import javax.persistence.Table;
+@Entity(name = "Member")
+@Table(name = "MEMBER"/*, schema = "", catalog = ""*/)
 public class Member {
     public Member() {
     }
@@ -16,6 +17,7 @@ public class Member {
     @Id
     private Long id;
     private String name;
+    private int age;
 
     public Long getId() {
         return id;
