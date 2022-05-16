@@ -17,7 +17,7 @@ public class JpaMain {
         tx.begin();
         try {
             Member member = em.find(Member.class, 150L);
-            member.setName("A");
+//            member.setName("A");
             tx.commit();
 
 
