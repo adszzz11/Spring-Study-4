@@ -1,6 +1,7 @@
 package hellojpa;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -17,7 +18,21 @@ public class Member {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
+//    private LocalDateTime createdDate;
+//    private LocalDate createdDate;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastModifiedDate;
+
+    @Lob
+    private String description;
+
+    @Transient
+    private int temp;
+
+
+    public Member() {
+    }
     public Long getId() {
         return id;
     }
@@ -82,17 +97,5 @@ public class Member {
         this.temp = temp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
-
-    @Lob
-    private String description;
-
-    @Transient
-    private int temp;
-
-
-    public Member() {
-    }
 
 }
