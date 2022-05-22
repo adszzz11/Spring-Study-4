@@ -15,3 +15,4 @@ Packaging : Jar<br>
 Java : 11<br>
 
 ## Metadata
+Lombok
