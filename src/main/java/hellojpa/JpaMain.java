@@ -16,14 +16,32 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Member member=new Member();
-            member.setUsername("test");
-//            member.setId("ID_A");
+            Team team = new Team();
+            team.setName("TEAMA");
+            em.persist(team);
+
+            Team team2 = new Team();
+            team.setName("TEAMB");
+            em.persist(team2);
+
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setTeam(team);
             em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = em.find(Team.class, findMember.getTeam());
+            Team changeTeam = em.find(Team.class, team2.getId());
+
+            findMember.setTeam(changeTeam);
+
             tx.commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             tx.rollback();
-        }finally {
+        } finally {
             em.close();
             emf.close();
         }
