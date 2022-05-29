@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.transaction.Transactional;
 import java.util.List;
 
 public class JpaMain {
@@ -16,29 +15,28 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
+
             Team team = new Team();
             team.setName("TEAMA");
             em.persist(team);
 
-            Team team2 = new Team();
-            team.setName("TEAMB");
-            em.persist(team2);
-
             Member member = new Member();
             member.setUsername("member1");
-            member.setTeam(team);
+            member.changeTeam(team); //1. 연관관계의 주인에게 값 추가
             em.persist(member);
 
-            em.flush();
-            em.clear();
+            team.addMember(member); //2. 편의성 메소드
+//            em.flush();
+//            em.clear();
 
-            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = em.find(Team.class, team.getId());
 
-            List<Member> members = findMember.getTeam().getMembers();
+            List<Member> members = findTeam.getMembers();
 
             for (Member m : members) {
-                System.out.println("m = " + m.getUsername());
+                System.out.println("m.getUsername() = " + m.getUsername());
             }
+
 
             tx.commit();
         } catch (Exception e) {
