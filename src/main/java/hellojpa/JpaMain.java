@@ -16,27 +16,17 @@ public class JpaMain {
         tx.begin();
         try {
 
-            Team team = new Team();
-            team.setName("TEAMA");
-            em.persist(team);
+            Movie movie = new Movie();
+            movie.setActor("a");
+            movie.setDirector("b");
+            movie.setName("asdf");
+            movie.setPrice(10000);
+            em.persist(movie);
+            em.flush();
+            em.clear();
 
-            Member member = new Member();
-            member.setUsername("member1");
-            member.changeTeam(team); //1. 연관관계의 주인에게 값 추가
-            em.persist(member);
-
-            team.addMember(member); //2. 편의성 메소드
-//            em.flush();
-//            em.clear();
-
-            Team findTeam = em.find(Team.class, team.getId());
-
-            List<Member> members = findTeam.getMembers();
-
-            for (Member m : members) {
-                System.out.println("m.getUsername() = " + m.getUsername());
-            }
-
+            Movie findMov = em.find(Movie.class, movie.getId());
+            System.out.println("findMov = " + findMov);
 
             tx.commit();
         } catch (Exception e) {
