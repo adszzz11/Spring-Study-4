@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @TableGenerator(name = "MEMBER_SEQ_GENERATOR", table = "MY_SEQUENCES", pkColumnValue = "MEMBER_SEQ", allocationSize = 1)
-public class Member {
+public class Member extends BaseEntity{
 
     @Id
     @GeneratedValue
@@ -30,6 +30,7 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<MemberProduct>  memberProducts = new ArrayList<>();
+
 
     public Long getId() {
         return id;
