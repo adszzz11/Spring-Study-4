@@ -28,6 +28,12 @@ public class JpaMain {
 //            em.persist(child1);
 //            em.persist(child2);
 
+            em.flush();
+            em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+            em.remove(findParent);
+
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
