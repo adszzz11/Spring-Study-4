@@ -23,24 +23,27 @@ public class JpaMain {
             Team team = new Team();
             team.setName("TEAM1");
 
+            Team team2 = new Team();
+            team2.setName("TEAM2");
+
             member1.setTeam(team);
             em.persist(team);
+            member2.setTeam(team2);
+            em.persist(team2);
 
             em.persist(member1);
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
             Member findMember = em.find(Member.class, member1.getId());
 
-            List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
-
-
-
-            System.out.println("findMember.getTeam() = " + findMember.getTeam());
+//            List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
+            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class).getResultList();
 
             System.out.println("==================");
-            System.out.println(findMember.getTeam().getName());
+            System.out.println("findMember.getTeam() = " + findMember.getTeam());
             System.out.println("==================");
 
         } catch (Exception e) {
