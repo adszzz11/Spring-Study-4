@@ -20,18 +20,29 @@ public class JpaMain {
             Member member2 = new Member();
             member2.setUsername("hello");
 
+            Team team = new Team();
+            team.setName("TEAM1");
+
+            member1.setTeam(team);
+            em.persist(team);
+
             em.persist(member1);
-            em.persist(member2);
 
             em.flush();
             em.clear();
 
-            Member reference = em.getReference(Member.class, member1.getId());
+            Member findMember = em.find(Member.class, member1.getId());
 
-            Hibernate.initialize(reference);
-            System.out.println(emf.getPersistenceUnitUtil().isLoaded(reference));
-            System.out.println("reference = " + reference.getUsername());
-            System.out.println(emf.getPersistenceUnitUtil().isLoaded(reference));
+            List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
+
+
+
+            System.out.println("findMember.getTeam() = " + findMember.getTeam());
+
+            System.out.println("==================");
+            System.out.println(findMember.getTeam().getName());
+            System.out.println("==================");
+
         } catch (Exception e) {
             e.printStackTrace();
             tx.rollback();
