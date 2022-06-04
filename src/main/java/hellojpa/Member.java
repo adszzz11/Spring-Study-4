@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @TableGenerator(name = "MEMBER_SEQ_GENERATOR", table = "MY_SEQUENCES", pkColumnValue = "MEMBER_SEQ", allocationSize = 1)
-public class Member extends BaseEntity{
+public class Member{
 
     @Id
     @GeneratedValue
@@ -18,19 +18,46 @@ public class Member extends BaseEntity{
     @Column(name = "USERNAME")
     private String username;
 
-//    @Column(name = "TEAM_ID")
-//    private Long teamId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
-//    @OneToOne
-//    @JoinColumn(name = "LOCKER_ID")
-//    Locker locker;
 
     @OneToMany(mappedBy = "member")
     private List<MemberProduct>  memberProducts = new ArrayList<>();
 
+
+    //period
+    @Embedded
+    private Period workPeriod;
+
+    //address
+    @Embedded
+    private Address homeAaddress;
+
+    public List<MemberProduct> getMemberProducts() {
+        return memberProducts;
+    }
+
+    public void setMemberProducts(List<MemberProduct> memberProducts) {
+        this.memberProducts = memberProducts;
+    }
+
+    public Period getWorkPeriod() {
+        return workPeriod;
+    }
+
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
+    }
+
+    public Address getHomeAaddress() {
+        return homeAaddress;
+    }
+
+    public void setHomeAaddress(Address homeAaddress) {
+        this.homeAaddress = homeAaddress;
+    }
 
     public Long getId() {
         return id;

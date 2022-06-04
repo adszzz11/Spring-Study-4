@@ -3,6 +3,7 @@ package hellojpa;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -14,25 +15,11 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-
-
-            Parent parent = new Parent();
-
-            Child child1 = new Child();
-            Child child2 = new Child();
-
-            parent.addChild(child1);
-            parent.addChild(child2);
-
-            em.persist(parent);
-//            em.persist(child1);
-//            em.persist(child2);
-
-            em.flush();
-            em.clear();
-
-            Parent findParent = em.find(Parent.class, parent.getId());
-            em.remove(findParent);
+            Member member = new Member();
+            member.setUsername("asdf");
+            member.setHomeAaddress(new Address("a","a","a"));
+            member.setWorkPeriod(new Period(LocalDateTime.now(), LocalDateTime.now()));
+            em.persist(member);
 
             tx.commit();
         } catch (Exception e) {
