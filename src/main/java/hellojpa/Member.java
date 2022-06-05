@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @TableGenerator(name = "MEMBER_SEQ_GENERATOR", table = "MY_SEQUENCES", pkColumnValue = "MEMBER_SEQ", allocationSize = 1)
-public class Member{
+public class Member {
 
     @Id
     @GeneratedValue
@@ -24,7 +24,7 @@ public class Member{
 
 
     @OneToMany(mappedBy = "member")
-    private List<MemberProduct>  memberProducts = new ArrayList<>();
+    private List<MemberProduct> memberProducts = new ArrayList<>();
 
 
     //period
@@ -33,7 +33,19 @@ public class Member{
 
     //address
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "HOME_CITY")),
+            @AttributeOverride(name = "street", column = @Column(name = "HOME_STREET")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "HOME_ZIPCODE"))
+    })
     private Address homeAaddress;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
+            @AttributeOverride(name = "street", column = @Column(name = "WORK_STREET")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "WORK_ZIPCODE"))
+    })
+    private Address workAaddress;
 
     public List<MemberProduct> getMemberProducts() {
         return memberProducts;
