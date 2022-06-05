@@ -3,13 +3,11 @@ package hellojpa;
 public class ValueMain {
     public static void main(String[] args) {
 
-        int a = 10;
-        int b = a;
+        Address ad1 = new Address("city", "street", "10000");
+        Address ad2 = new Address("city", "street", "10000");
 
-        Integer t1 = new Integer(10);
-        Integer t2 = t1;
+        System.out.println("(ad1 == ad2) = " + (ad1 == ad2));
 
-        System.out.println("t1 = " + t1);
-        System.out.println("t2 = " + t2);
+        System.out.println("(ad1.equals(ad2)) = " + (ad1.equals(ad2)));
     }
 }
