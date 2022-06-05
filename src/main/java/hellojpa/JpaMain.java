@@ -15,21 +15,34 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Address address = new Address("oldCity", "a", "a");
             Member member = new Member();
-            Address address1 = new Address(address.getCity(), address.getStreet(), address.getZipcode());
-            member.setUsername("asdf");
-            member.setHomeAaddress(address);
+            member.setUsername("member");
+            member.setHomeAaddress(new Address("a", "b", "c"));
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("피자");
+            member.getFavoriteFoods().add("햄버거");
+
+            member.getAddressHistory().add(new Address("a1", "b", "c"));
+            member.getAddressHistory().add(new Address("a2", "b", "c"));
+
             em.persist(member);
 
-            Member member2 = new Member();
-            member2.setUsername("asdfasdf");
-            member2.setHomeAaddress(address1);
-            em.persist(member2);
+            em.flush();
+            em.clear();
 
-            member2.getHomeAaddress().setCity("newCity");
+            System.out.println("------------------------------------------------------------");
+            Member findMember = em.find(Member.class, member.getId());
 
-
+            findMember.getHomeAaddress().setCity("newCity");
+            findMember.setHomeAaddress(new Address(
+                    "newCity",
+                    findMember.getHomeAaddress().getStreet(),
+                    findMember.getHomeAaddress().getZipcode()
+                )
+            );
+            // 치킨 to 한식
+            findMember.getFavoriteFoods().remove("치킨");
+            findMember.getFavoriteFoods().add("한식");
 
             tx.commit();
         } catch (Exception e) {
