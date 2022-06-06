@@ -40,9 +40,13 @@ public class JpaMain {
                     findMember.getHomeAaddress().getZipcode()
                 )
             );
+
             // 치킨 to 한식
             findMember.getFavoriteFoods().remove("치킨");
             findMember.getFavoriteFoods().add("한식");
+
+            findMember.getAddressHistory().remove(new Address("a2", "b", "c"));
+            findMember.getAddressHistory().add(new Address("newCity", "b", "c"));
 
             tx.commit();
         } catch (Exception e) {
