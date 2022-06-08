@@ -3,6 +3,9 @@ package hellojpa;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,40 +16,28 @@ public class JpaMain {
         EntityManager em = emf.createEntityManager();
 
         EntityTransaction tx = em.getTransaction();
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
         tx.begin();
         try {
-            Member member = new Member();
-            member.setUsername("member");
-            member.setHomeAaddress(new Address("a", "b", "c"));
-            member.getFavoriteFoods().add("치킨");
-            member.getFavoriteFoods().add("피자");
-            member.getFavoriteFoods().add("햄버거");
+            List<Member> resultList1 = em.createQuery(
+                    "select m from Member m where m.username like 'kim'",
+                    Member.class
+            ).getResultList();
 
-            member.getAddressHistory().add(new AddressEntity("a1", "b", "c"));
-            member.getAddressHistory().add(new AddressEntity("a2", "b", "c"));
+            CriteriaQuery<Member> query= cb.createQuery(Member.class);
+            Root<Member> m = query.from(Member.class);
+            CriteriaQuery<Member> cq = query.select(m);
 
-            em.persist(member);
+            List<Member> resultList2 = em.createNativeQuery("select MEMBER_ID, city, street, zipcode, USERNAME from MEMBER", Member.class).getResultList();
 
-            em.flush();
-            em.clear();
 
-            System.out.println("------------------------------------------------------------");
-            Member findMember = em.find(Member.class, member.getId());
+            String username="lee";
+            if(username != null) {
+                cq.where(cb.equal(m.get("username"), "kim"));
+            }
+            em.createQuery(cq).getResultList();
 
-            findMember.getHomeAaddress().setCity("newCity");
-            findMember.setHomeAaddress(new Address(
-                    "newCity",
-                    findMember.getHomeAaddress().getStreet(),
-                    findMember.getHomeAaddress().getZipcode()
-                )
-            );
-
-            // 치킨 to 한식
-            findMember.getFavoriteFoods().remove("치킨");
-            findMember.getFavoriteFoods().add("한식");
-
-//            findMember.getAddressHistory().remove(new AddressEntity("a2", "b", "c"));
-//            findMember.getAddressHistory().add(new AddressEntity("newCity", "b", "c"));
 
             tx.commit();
         } catch (Exception e) {
