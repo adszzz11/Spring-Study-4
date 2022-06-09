@@ -22,18 +22,20 @@ public class JpqlMain {
             member.setAge(10);
             em.persist(member);
 
-            TypedQuery<Member> q1 = em.createQuery("select m from Member m", Member.class);
-            TypedQuery<String> q2 = em.createQuery("select m.username from Member m", String.class);
-            Query q3 = em.createQuery("select m from Member m");
+            em.flush();
+            em.clear();
 
-            q3.getResultList(); // return List<nullable>
+            //entity
+            List<Team> resultList = em.createQuery("select m.team from Member m join m.team t", Team.class).getResultList();
+            //embedded
+            List<Address> resultList1 = em.createQuery("select o.address from Order o", Address.class).getResultList();
+            //scala
+            List<Object[]> resultList2 = em.createQuery("select distinct m.username, m.age from Member m").getResultList();
 
-            q3.getSingleResult(); // return Class<not nullable, only one result// >
-
-            Member singleResult = em.createQuery("select m from Member m where m.username = :username", Member.class)
-                    .setParameter("username", "member1")
-                    .getSingleResult();
-
+            for (Object o : resultList2) {
+                Object[] temp= (Object[])o;
+                System.out.println(temp[0]+", "+temp[1]);
+            }
 
 
             tx.commit();
