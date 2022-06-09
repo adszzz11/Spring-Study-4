@@ -26,6 +26,7 @@ public class JpqlMain {
                 Member member = new Member();
                 member.setUsername("member 1");
                 member.setTeam(team);
+                member.setMemberType(MemberType.ADMIN);
                 member.setAge(10);
 
                 em.persist(member);
@@ -35,12 +36,18 @@ public class JpqlMain {
             em.flush();
             em.clear();
 
-//            String q = "select m from Member m inner join m.team t";
-//            String q = "select m from Member m left outer join m.team t";
-//            String q = "select m from Member m, Team t where m.username = t.name";
-//            String q = "select m from Member m left join m.team t on t.name = 'teamA'";
-            String q = "select m from Member m left join Team t on m.username = t.name";
-            List<Member> resultList = em.createQuery(q, Member.class).getResultList();
+//            String q = "select m.username, 'HELLO', TRUE from Member m where m.memberType=hellojpa.jpql.MemberType.USER";
+            String q = "select m.username, 'HELLO', TRUE from Member m where m.memberType=hellojpa.jpql.MemberType.USER";
+
+            List<Object[]> resultList = em.createQuery(q).getResultList();
+
+            for (Object[] objects : resultList) {
+                System.out.println("objects = " + objects[0]);
+                System.out.println("objects = " + objects[1]);
+                System.out.println("objects = " + objects[2]);
+
+            }
+
 
 
             tx.commit();
