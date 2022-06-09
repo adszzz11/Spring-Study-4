@@ -25,17 +25,10 @@ public class JpqlMain {
             em.flush();
             em.clear();
 
-            //entity
-            List<Team> resultList = em.createQuery("select m.team from Member m join m.team t", Team.class).getResultList();
-            //embedded
-            List<Address> resultList1 = em.createQuery("select o.address from Order o", Address.class).getResultList();
-            //scala
-            List<Object[]> resultList2 = em.createQuery("select distinct m.username, m.age from Member m").getResultList();
-
-            for (Object o : resultList2) {
-                Object[] temp= (Object[])o;
-                System.out.println(temp[0]+", "+temp[1]);
-            }
+            List<MemberDTO> resultList = em.createQuery("select new hellojpa.jpql.MemberDTO(m.username, m.age) from Member m", MemberDTO.class).getResultList();
+            MemberDTO memberDTO = resultList.get(0);
+            System.out.println("memberDTO = " + memberDTO.getUsername());
+            System.out.println("memberDTO = " + memberDTO.getAge());
 
 
             tx.commit();
