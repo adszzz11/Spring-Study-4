@@ -35,19 +35,16 @@ public class JpqlMain {
 
             em.flush();
             em.clear();
+            String query = "select " +
+                    "case when m.age <=10 then '학생요금' " +
+                    "when m.age >=60 then '경로요금' " +
+                    "else '일반요금' end " +
+                    "from Member m";
 
-//            String q = "select m.username, 'HELLO', TRUE from Member m where m.memberType=hellojpa.jpql.MemberType.USER";
-            String q = "select m.username, 'HELLO', TRUE from Member m where m.memberType=hellojpa.jpql.MemberType.USER";
-
-            List<Object[]> resultList = em.createQuery(q).getResultList();
-
-            for (Object[] objects : resultList) {
-                System.out.println("objects = " + objects[0]);
-                System.out.println("objects = " + objects[1]);
-                System.out.println("objects = " + objects[2]);
-
+            List<String> resultList = em.createQuery(query, String.class).getResultList();
+            for (String s : resultList) {
+                System.out.println(s);
             }
-
 
 
             tx.commit();
