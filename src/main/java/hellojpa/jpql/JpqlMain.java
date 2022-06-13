@@ -53,14 +53,10 @@ public class JpqlMain {
             em.flush();
             em.clear();
 
-//            String query = "select m from Member m where m = :member";
-//            String query = "select m from Member m where m.id = :memberId";
-            String query = "select m from Member m where m.team = :team";
 
-
-            Member member1 = em.createQuery(query, Member.class)
-//                    .setParameter("member", member)
-                    .setParameter("team",team)
+            //XML 우선, XML으로 다르게 배포하기 가능
+            Member member1 = em.createNamedQuery("Member.findByUsername", Member.class)
+                    .setParameter("username",member.getUsername())
                     .getSingleResult();
             System.out.println("member1 = " + member1);
 
