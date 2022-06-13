@@ -53,13 +53,10 @@ public class JpqlMain {
             em.flush();
             em.clear();
 
+            int i = em.createQuery("update Member m set m.age = 20").executeUpdate(); // 영속성 컨텍스트 무시
 
-            //XML 우선, XML으로 다르게 배포하기 가능
-            Member member1 = em.createNamedQuery("Member.findByUsername", Member.class)
-                    .setParameter("username",member.getUsername())
-                    .getSingleResult();
-            System.out.println("member1 = " + member1);
-
+            //해결법1. 벌크 연산 실행 후 영속성 컨텍스트 초기화
+            System.out.println("i = " + i);
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
