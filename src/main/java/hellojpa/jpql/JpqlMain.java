@@ -23,38 +23,51 @@ public class JpqlMain {
             team.setName("teamA");
             em.persist(team);
 
+            Team team2 = new Team();
+            team2.setName("teamB");
+            em.persist(team2);
 
             Member member = new Member();
-            member.setUsername("관리자");
+            member.setUsername("회원1");
             member.setTeam(team);
             member.setMemberType(MemberType.ADMIN);
             member.setAge(10);
 
             em.persist(member);
+
             Member member2 = new Member();
-            member2.setUsername("관리자2");
-            member2.setTeam(team);
+            member2.setUsername("회원2");
+            member2.setTeam(team2);
             member2.setMemberType(MemberType.ADMIN);
             member2.setAge(10);
 
             em.persist(member2);
 
+            Member member3 = new Member();
+            member3.setUsername("회원3");
+            member3.setTeam(team2);
+            member3.setMemberType(MemberType.ADMIN);
+            member3.setAge(10);
+
+            em.persist(member3);
+
             em.flush();
             em.clear();
 
-//            String query = "select m.username from Member m"; //상태 필드
-//            String query = "select m.team from Member m"; //단일 값 연관 필드. 묵시적 내부 조인 발생, 추가탐색 못함.
-//            String query = "select t.members from Team t"; //컬렉션 값 연관 경로. 묵시적 내부 조인 발생, 추가탐색 못함.
-//            String query = "select m.username from Team t join t.members m"; //컬렉션 값 연관 경로. 명시적 조인 실행
-            String query = "select p.name from Order o join o.product p"; //practice
+//            String query = "select m from Member m join fetch m.team";
+//            String query = "select distinct t from Team t join fetch t.members";
+//            String query = "select distinct t from Team t join fetch t.members m"; // 원칙적으로 사용하면 안됨. fetch를 여러번 시도할 때만 할 것
+//            String query = "select t from Team t join t.members m"; // Collection Type 사용, select 추가로 나감. paging 사용 시 문제 생김
+//            String query = "select m from Member m join fetch m.team"; // 해결1. 서로 바꾸기
+            String query = "select t from Team t"; // 해결2. Lazy Loading, N+1 문제 발생
+            //해결 3. BatchSize
+            //해결 4. DTO
 
-//            되도록이면 묵시적인 내부 조인이 발생하지 않게 짜자.
 
-//            Collection resultList = em.createQuery(query, Collection.class).getResultList();
-            List<Collection> resultList = em.createQuery(query, Collection.class).getResultList();
+            List<Team> resultList = em.createQuery(query, Team.class).setFirstResult(0).setMaxResults(2).getResultList();
 
-            for (Object o : resultList) {
-                System.out.println("o = " + o);
+            for (Team t : resultList) {
+                System.out.println("t = " + t.getName() + "," + t + ", members : " + t.getMembers().size() );
             }
 
             tx.commit();
